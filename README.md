@@ -1,5 +1,5 @@
 # blockchain-developer-bootcamp-final-project
-#  A Decentalised Voting System
+#  A Decentralized Voting System
 #  Problem:
 In my country (Nigeria), there's an alarming rate of election fraud and rigging. Many a times, there  are recorded issues of a single person voting across different pooling units and there's no proper system in place to curb such cheat since they're empowered by people in power and this shows no accounability. An electronic voting system was introduced some years back there's doubt in the ability of the system to secure the data and  also the possibility of the voting line being hijacked by hackers and hence, rigged.
 
