@@ -13,12 +13,12 @@ Yes a database is needed to store information of all the available users and to 
 Yes there are multiple writers on the system(the end users).
 3. can a 3rd party be trusted?
 No, a third party cannot be trusted with the personal infomation.
-5. access control is not needed
-6. Pubilc blockchain?
+4. access control is not needed.
+5. Pubilc blockchain?
 yes transactions have to be monitored in this data purchased.
 
 # Workflow
 1. a user registers on the platform and a wallet is generated for the user.
 2. a user is able to fund his wallet.
-4. a users is able to purchse data with ether and a certain amount oof bandwith is allocated to the user
-5. a user can check his balance  to know how much bandwith us left.
+4. a users is able to purchse data with ether and a certain amount of bandwith is allocated to the user
+5. a user can check his balance to know how much bandwith is left.
