@@ -20,5 +20,5 @@ yes transactions have to be monitored in this data purchased.
 # Workflow
 1. a user registers on the platform and a wallet is generated for the user.
 2. a user is able to fund his wallet.
-4. a users is able to purchse data with ether and a certain amount of bandwith is allocated to the user
+4. a user is able to purchse data with ether and a certain amount of bandwith is allocated to the user
 5. a user can check his balance to know how much bandwith is left.
