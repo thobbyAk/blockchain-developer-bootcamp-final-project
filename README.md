@@ -33,3 +33,4 @@ yes transactions have to be monitored in this data purchased.
 6. once the seller has been credited for the transaction the seller can      remove the car.
 7. Buyer can see a ist of cars purchased
 8. seller can see a list of car listed for sales and their individual purchase status.
+
