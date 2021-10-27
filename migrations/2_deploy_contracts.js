@@ -1,5 +1,5 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
-
+var VintageShop = artifacts.require("./VintageShop");
+const commission = 10;
 module.exports = function(deployer) {
-  deployer.deploy(SimpleStorage);
+  deployer.deploy(VintageShop);
 };

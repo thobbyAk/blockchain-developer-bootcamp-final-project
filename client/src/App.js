@@ -1,8 +1,11 @@
 import React, { Component } from "react";
+import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
 
 import "./App.css";
+import Home from "./pages/home";
+import Shop from "./pages/shop";
 
 class App extends Component {
   constructor(props){
@@ -11,7 +14,10 @@ class App extends Component {
        storageValue: 0, 
        web3: null, 
        accounts: null, 
-       contract: null };
+       contract: null,
+       isAuthenticated: false, 
+       isLoading: false,
+      };
 
   }
 
@@ -44,16 +50,17 @@ class App extends Component {
   };
 
   runExample = async () => {
-    const { accounts, contract } = this.state;
+    // const { accounts, contract } = this.state;
 
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
+    // // Stores a given value, 5 by default.
+    // await contract.methods.set(5).send({ from: accounts[0] });
 
-    // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
+    // // Get the value from the contract to prove it worked.
+    // const response = await contract.methods.get().call();
 
-    // Update state with the result.
-    this.setState({ storageValue: response });
+    // // Update state with the result.
+    // this.setState({ storageValue: response });
+    console.log('testcd')
   };
 
   render() {
@@ -61,8 +68,15 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
+      
       <div className="App">
-        <h1>Good to Go!</h1>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/" render={props => <Home />}/>
+            <Route exact path="/shop" render={ ()=>{ return(Shop)}}/>
+          </Switch>
+        </BrowserRouter>
+        {/* <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
         <h2>Smart Contract Example</h2>
         <p>
@@ -72,7 +86,7 @@ class App extends Component {
         <p>
           Try changing the value stored on <strong>line 42</strong> of App.js.
         </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <div>The stored value is: {this.state.storageValue}</div> */}
       </div>
     );
   }
