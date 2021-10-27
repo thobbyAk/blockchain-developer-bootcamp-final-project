@@ -1,13 +1,13 @@
 # blockchain-developer-bootcamp-final-project
 #  Vintage Car Salses Shop
 #  Overview:
-    A Blockchain sales shop  which allows vintage car owners(sellers) to upload vintage car models, assign a price to it and it can be purchased by a buyer using cryptocurrency. The car information is stored in a decentalized storaged and the hash tied to the card information is minted as NFT.
+    A Blockchain sales shop  which allows vintage car owners(sellers) to upload vintage car models on Ipfs, then mint as NFT, a price to it and it can be purchased by a buyer using cryptocurrency. 
 
 # Administator:
-    The sales shop Admin deploys contract and sets the minimum commission to be gotten from cars. Admin also approves car owners (sellers) to add cars and receieve funds.
+    The sales shop Admin deploys contract. Admin also approves car owners (sellers) to add cars and receieve funds.
 
 # Car Onwer(seller):
-    A vintage car owner without having to consult a third party or car sales man can register an account on the blockchain and wait admin approval, once the seller is approved he can upload the car information and car pictures. The seller can monitor the sales and upload more cars in the case where there the seller has more vintage cars for sale.
+    A vintage car owner without having to consult a third party or car sales man can register an account on the blockchain and wait admin approval, once the seller is approved he can upload the car information and car pictures then mint as NFT. The seller can monitor the sales and upload more cars in the case where there the seller has more vintage cars for sale.
 
 
 # Buyer:
@@ -28,9 +28,10 @@ yes transactions have to be monitored in this data purchased.
 1. Admin deploys a car with minimum commision over cars.
 2. Seller Registers an account on the blockchain.
 3. Seller uploads car information.
+4  Seller mints car as NFT.
+4. seller assings a forsale state for the NFT
 4. Buyer registers an account on the blockchain.
-5. The buyer can ppurchase a car.
-6. once the seller has been credited for the transaction the seller can      remove the car.
-7. Buyer can see a ist of cars purchased
-8. seller can see a list of car listed for sales and their individual purchase status.
+5. The buyer can ppurchase an NFT.
+7. Buyer can see a list of cars purchased
+9. seller can see a list of car listed for sales and their individual purchase status.
 
