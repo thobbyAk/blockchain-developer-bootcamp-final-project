@@ -42,7 +42,9 @@ contract VintageShop is ERC721URIStorage, Ownable {
   // lists of cars owned by users [sellers]
   mapping (address => bytes32[]) private ownedCars;
 
-  mapping(address => Car[]) private carDatabase;
+  mapping(address => Car[]) public carDatabase;
+
+  mapping(uint256 => Car) public carToken;
 
   // <enum State: ForSale, Sold, Shipped, Received>
   // the state tells the current state of the car 
@@ -128,7 +130,8 @@ contract VintageShop is ERC721URIStorage, Ownable {
      */
      modifier hasEnough(uint256 _tokenId){
       address seller = ownerOf(_tokenId);
-       uint sellerPrice = carDatabase[seller][_tokenId].price;
+       uint sellerPrice = carToken[_tokenId].price;
+      //  console.log("sellerPrice", sellerPrice);
        require(msg.value >= sellerPrice);  
        _;
      }
@@ -137,7 +140,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
       //refund them after pay for NFT (why it is before, _ checks for logic before func)
       _;
       address seller = ownerOf(_tokenId);
-      uint _price = carDatabase[seller][_tokenId].price;
+      uint _price = carToken[_tokenId].price;
       uint amountToRefund = msg.value - _price;
       address payable buyer = payable(msg.sender);
       buyer.transfer(amountToRefund);
@@ -210,17 +213,20 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
   /** 
      * @dev Seller Puts the NFT up forsale
-     * @param tokenId Token to be Sold
+     * @param _tokenId Token to be Sold
      * @param price price the seller wants to sell
      * @param name Name of the car the seller wants to sell
      * @param model model of the car the seller wants to sell
      */
-     function addNFT(uint256 tokenId, uint price, string memory name, string memory model)
-      IsSellerVerified(msg.sender) VerifyNFTOwner(tokenId) external{
+     function addNFT(uint256 _tokenId, uint price, string memory name, string memory model)
+      IsSellerVerified(msg.sender) VerifyNFTOwner(_tokenId) external{
+        require(ownerOf(_tokenId) == msg.sender, "Only token owner can put up token for sell");
+        setApprovalForAll(address(this), true);
+       
         uint newCarId = carDatabase[msg.sender].length + 1;
         Car memory car;
 
-        car.tokenId = tokenId;
+        car.tokenId = _tokenId;
         car.carId = newCarId;
         car.price = price;
         car.name = name;
@@ -228,8 +234,9 @@ contract VintageShop is ERC721URIStorage, Ownable {
         car.state = State.ForSale;
         car.owner = payable(msg.sender);
         car.purchasedCount = 0;
-        
+
         carDatabase[msg.sender].push(car);
+        carToken[_tokenId].price = price;
         emit ForSale("Car For sale", newCarId, msg.sender);
 
 
@@ -244,18 +251,20 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
      */
      function purchaseNFT (uint256 tokenId)
-      isUserOrAdmin(msg.sender) hasEnough(tokenId) checkValue(tokenId)  external payable {
-        require(msg.sender != address(0));
+      isUserOrAdmin(msg.sender) hasEnough(tokenId) checkValue(tokenId) payable external {
         address payable seller = payable(ownerOf(tokenId));
-         nftAddress = ERC721(seller);
-         approve(msg.sender, tokenId);
-        safeTransferFrom(seller, msg.sender, tokenId);
-        uint sellerPrice = carDatabase[seller][tokenId].price;
-        seller.transfer(sellerPrice);
+       
+        safeTransferFrom(seller, msg.sender, tokenId, "");
+        
         carDatabase[seller][tokenId].state = State.Sold;
+        
+        
+        
         emit Received(msg.sender, tokenId, msg.value, address(this).balance);
 
      }
+
+    //  functi  on getCarPrice(uint)
 
     
 
