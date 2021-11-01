@@ -1,5 +1,5 @@
-// const { BN, constants, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
-let BN = web3.utils.BN;
+const { BN, constants, expectEvent, expectRevert } = require('@openzeppelin/test-helpers');
+// let BN = web3.utils.BN;
 const VintageShop = artifacts.require("./VintageShop");
 let { catchRevert } = require("./exceptionHelpers.js");
 
@@ -144,8 +144,8 @@ contract("vintageShop", function ( accounts ) {
          const result = await instance.awardItem(isSeller, hash, metadata, {from: isSeller});
         //  console.log('resultNFT', result)
           const tx = await instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, {from: isSeller});
-          // console.log('resultaddNFT', tx)
-          if(tx.logs[0].event == "ForSale"){
+          console.log('resultaddNFT', tx)
+          if(tx.logs[1].event == "ForSale"){
             eventEmitted = true
           }
           
