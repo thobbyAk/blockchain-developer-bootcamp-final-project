@@ -37,14 +37,16 @@ contract VintageShop is ERC721URIStorage, Ownable {
   mapping (bytes32 => uint) private carHashes;
 
   // list of cars bought by users [buyers]
-  mapping (address => bytes32[]) private boughtCars;
+  mapping (address => uint256[]) private boughtTokens;
     
   // lists of cars owned by users [sellers]
-  mapping (address => bytes32[]) private ownedCars;
+  mapping (address => uint256[]) private ownedTokens;
 
   mapping(address => Car[]) public carDatabase;
 
   mapping(uint256 => Car) public carToken;
+
+  mapping(uint256 => Car) public carSale;
 
   // <enum State: ForSale, Sold, Shipped, Received>
   // the state tells the current state of the car 
@@ -88,6 +90,8 @@ contract VintageShop is ERC721URIStorage, Ownable {
     event Minted(string message , uint _tokenId);
 
     event Received(address buyer, uint _tokenId, uint amount, uint balance);
+
+    event Sent(address seller, uint256 amount, uint256 balance);
 
   //modifiers
   //verify that the caller of the function is an admin
@@ -136,6 +140,10 @@ contract VintageShop is ERC721URIStorage, Ownable {
        _;
      }
 
+      /** 
+     * @dev checks the value is higher than the price and refunds the buyer is there is an extra
+     * @param _tokenId Id of the token to get exact price of the token
+     */
      modifier checkValue(uint256 _tokenId) {
       //refund them after pay for NFT (why it is before, _ checks for logic before func)
       _;
@@ -145,6 +153,15 @@ contract VintageShop is ERC721URIStorage, Ownable {
       address payable buyer = payable(msg.sender);
       buyer.transfer(amountToRefund);
     }
+
+     /** 
+     * @dev Checks if user exists in Bookshop record
+     * @param userAddress Address of user
+     */
+     modifier userExists(address userAddress){
+      require(users[userAddress].userExists == 1, "user does not exist");
+      _;
+  }
 
 
 
@@ -222,7 +239,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
       IsSellerVerified(msg.sender) VerifyNFTOwner(_tokenId) external{
         require(ownerOf(_tokenId) == msg.sender, "Only token owner can put up token for sell");
         setApprovalForAll(address(this), true);
-       
+        ownedTokens[msg.sender].push(_tokenId);
         uint newCarId = carDatabase[msg.sender].length + 1;
         Car memory car;
 
@@ -243,6 +260,24 @@ contract VintageShop is ERC721URIStorage, Ownable {
       
      } 
 
+       /** 
+     * @dev Seller tranfers ownership token to the buyer
+     * @param from address of the seller
+     * @param to address of buyer
+     * @param tokenId Id of the token being sold
+     */
+
+      function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+      ) public virtual override {
+          //solhint-disable-next-line max-line-length
+          require(_isApprovedOrOwner(address(this), tokenId), "ERC721: transfer caller is not owner nor approved");
+
+          _transfer(from, to, tokenId);
+      }
+
 
       /** 
      * @dev Buyer buys the NFT up forsale
@@ -254,12 +289,9 @@ contract VintageShop is ERC721URIStorage, Ownable {
       isUserOrAdmin(msg.sender) hasEnough(tokenId) checkValue(tokenId) payable external {
         address payable seller = payable(ownerOf(tokenId));
        
-        safeTransferFrom(seller, msg.sender, tokenId, "");
-        
-        carDatabase[seller][tokenId].state = State.Sold;
-        
-        
-        
+        transferFrom(seller, msg.sender, tokenId);
+        boughtTokens[msg.sender].push(tokenId);
+        // carDatabase[seller][tokenId].state = State.Sold;
         emit Received(msg.sender, tokenId, msg.value, address(this).balance);
 
      }
@@ -267,27 +299,47 @@ contract VintageShop is ERC721URIStorage, Ownable {
     //  functi  on getCarPrice(uint)
 
     
-
-
-  function buyCar(bytes32 _carHash) external payable {
-
-  }
+    /**
+    * @dev send / withdraw _amount to seller
+    */
+    function sendTo(address payable _seller, uint256 _amount) public onlyOwner {
+      require(_seller != address(0) && _seller != address(this));
+      require(_amount > 0 && _amount <= address(this).balance);
+      _seller.transfer(_amount);
+      emit Sent(_seller, _amount, address(this).balance);
+      }
   
-  function shipCar() external {
 
-  }
+        /**
+    * @dev gets the cars forsale
+    */ 
+      function getCarForSale() public view returns(Car[] memory ){
 
-  function recieveCar() external {
-
-  }
-
-  function getUser() isUserOrAdmin(msg.sender) view external returns (bool _isAuth, bool _isAdmin, bool _isSeller) {
-    _isAuth = true;
-    if(msg.sender == admin){
-      _isAdmin = true;
+      }
+        /**
+     * @dev requests for tokens paid for by an existion user
+     */
+      function getPurchasedTokens(address _user) userExists(_user) view public returns(uint256[] memory _boughtTokens ){
+        _boughtTokens = boughtTokens[_user];
+      }
+      
+          /**
+     * @dev requests for tokens owned by an existion user
+     */
+     function getOwnedTokens(address _user) userExists(_user) view public returns(uint256[] memory _ownedTokens ){
+      _ownedTokens = ownedTokens[_user];
     }
-    _isSeller = users[msg.sender].isSeller;
-  }
+
+      /**
+     * @dev Verify/Authenticate existing user 
+     */
+    function getUser() isUserOrAdmin(msg.sender) view external returns (bool _isAuth, bool _isAdmin, bool _isSeller) {
+      _isAuth = true;
+      if(msg.sender == admin){
+        _isAdmin = true;
+      }
+      _isSeller = users[msg.sender].isSeller;
+    }
   
 
   
