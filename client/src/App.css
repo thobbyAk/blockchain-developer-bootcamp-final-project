@@ -20,3 +20,22 @@
 .App-link {
   color: #09d3ac;
 }
+.welcome{
+  background-color: #282c34;
+  min-height: 100vh;
+}
+.container{
+  text-align: center;
+}
+.title{
+  margin-top: 4rem;
+  color: #fff;
+  font-size: 4.5rem;
+
+}
+.btn-vin{
+  border: 1px solid #fff !important;
+  background: transparent !important;
+  color: #fff;
+  width: 100%;
+}

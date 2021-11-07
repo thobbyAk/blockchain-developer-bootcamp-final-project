@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import VintageShopContract from "./contracts/VintageShop.json";
 import getWeb3 from "./getWeb3";
+import {MyProvider, UserContext} from "./utils/context/userContext";
 
 import "./App.css";
 import Home from "./pages/home";
@@ -15,8 +17,12 @@ class App extends Component {
        web3: null, 
        accounts: null, 
        contract: null,
-       isAuthenticated: false, 
+       isAuthorized: false, 
+       isAdmin: false,
+       isSeller: false,
+       isBuyer: false,
        isLoading: false,
+       noWallet: false
       };
 
   }
@@ -31,25 +37,30 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = VintageShopContract.networks[networkId];
       const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+        VintageShopContract.abi,
         deployedNetwork && deployedNetwork.address,
       );
-
+     console.log('accounts', accounts);
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+      this.setState({ web3, accounts, contract: instance }, () =>this.userSignin());
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
         `Failed to load web3, accounts, or contract. Check console for details.`,
       );
+      this.setState({
+        noWallet: true
+      });
+      console.log("wallet", this.state.noWallet)
       console.error(error);
     }
   };
 
   runExample = async () => {
+  
     // const { accounts, contract } = this.state;
 
     // // Stores a given value, 5 by default.
@@ -62,19 +73,61 @@ class App extends Component {
     // this.setState({ storageValue: response });
     console.log('testcd')
   };
+  userSignin = () =>{
+    // sign user in
+    const { accounts, contract } = this.state;
+    let user = contract.methods.getUser().call({from: accounts[0]});
+    user.then(response => {
+      //authentication is successful
+      console.log('user: ',response);
 
+      // if(response && response[0] === true){
+      //   this.setState({isAuthorized: true});
+      //   localStorage.setItem('isAuthenticated', true);
+      //   // admin check
+      //   if(response[2] === true){
+      //     this.setState({isAdmin: true});
+      //   }
+      //   //is seller
+      //   else if(response[1] === true){
+      //     this.setState({isSeller: true});
+      //   }
+      //   else{
+      //     this.setState({isReader: true});
+      //   }
+      //   this.setState({pageLoading: false});
+      // }
+    }).catch(error=>{
+      this.setState({isAuthorized: false});
+      localStorage.setItem('isAuthenticated', false);
+      this.setState({pageLoading: false});
+    })   
+    
+  }
+  
   render() {
+    console.log('context',this.context) 
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
+      // return <div>Loading Web3, accounts, and contract...</div>;
+   
     }
     return (
       
       <div className="App">
         <BrowserRouter>
-          <Switch>
-            <Route exact path="/" render={props => <Home />}/>
-            <Route exact path="/shop" render={ ()=>{ return(Shop)}}/>
-          </Switch>
+        <MyProvider>
+          <UserContext.Consumer>
+            {(context) =>
+                <Switch>
+                <Route exact path="/" render={props => {return( <Home {...props} baseAppState={this.state} />  )} } />
+                <Route exact path="/shop" render={props => {return( <Shop {...props} context={context} baseAppState={this.state} />  )} } />
+                </Switch>
+              
+            }
+          </UserContext.Consumer>
+        </MyProvider>
+       
         </BrowserRouter>
         {/* <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
