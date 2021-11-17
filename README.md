@@ -45,8 +45,12 @@ VintageShop (root)
 +-- src
 |   +-- abis
 |   +-- Component
-|   |   +-- Header.js
-|   |   +-- MetamaskConnectButton.js
+|   |   +-- navbar.js
+|   |
+|   +--pages
+|   |  +-- home.js
+|   |  +-- shop.js
+|   |
 |   |
 |   +-- contracts
 |   |   +-- Migrations.sol
@@ -54,6 +58,7 @@ VintageShop (root)
 |   |
 |   +-- App.js
 |   +-- App.css
+|   +-- getWeb3.js
 |   +-- index.css
 |   +-- index.js
 |
@@ -62,7 +67,6 @@ VintageShop (root)
 |
 +-- truffle-config.js
 +-- package.json
-+-- .env.example
 +-- avoiding_common_attacks.md
 +-- design_pattern_decisions.md
 +-- deployed_address.txt
