@@ -4,9 +4,13 @@ import {styled, makeStyles} from '@material-ui/core/styles'
 import {Redirect} from 'react-router-dom';
 import ImageList from '@material-ui/core/ImageList'
 import ImageListItem from '@material-ui/core/ImageListItem'
+import getWeb3 from "../getWeb3";
 import { Container, Grid, Paper, Button, Box, TextField, TextareaAutosize } from '@material-ui/core';
 import { UserContext } from '../utils/context/userContext';
-
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+  
+toast.configure()
 
 
 const itemData = [
@@ -52,7 +56,7 @@ export class home extends Component {
             accounts: null, 
             contract: null,
             isAuthorized: false, 
-            isAdmin: true,
+            isAdmin: false,
             isSeller: false,
             isBuyer: false,
             isLoading: false,
@@ -62,45 +66,105 @@ export class home extends Component {
            this.sellerEntersShop = this.sellerEntersShop.bind(this);
            this.buyerEntersShop = this.buyerEntersShop.bind(this);
     }
-    UNSAFE_componentWillMount(prevProps, prevState){
-        console.log('homeProps', this.props);
-        this.setState({
-          isAdmin: true
-        });
-    }
+  
     componentDidMount(){
+      if(this.props.baseAppState.isAdmin){
+        this.context.updateContext("isAdmin", true);
+        this.setState({isAdmin: true});
+      }
       this.context.updateContext("contract" , this.props.baseAppState.contract);
+      this.context.updateContext("accounts" , this.props.baseAppState.accounts);
       console.log('homePropsNav',this.props)
     }
 
-    sellerEntersShop = () => {
+    sellerEntersShop = async () => {
       console.log('go to shop')
-      
       this.context.updateContext("isSeller" , true )
-      // this.setState((state, props) => ({
-      //   isSeller: state.isSeller + props.baseAppState.isSeller
-      // }));
-   
-      this.props.history.push('/shop');
-      console.log('go to shop',this.state.isSeller);
-      console.log('go to shop',this.props);
+      const contract = this.context.state.contract;
+      const account = this.context.state.accounts[0];
+      let response = await contract.methods.checkUser().call({from: account});
+      console.log('resp',response);
+        if(response && response === true){
+          this.props.history.push('/shop');
+        }else{
+         this.addNewSeller();
+        }
+     
+     
     }
-    buyerEntersShop = () => {
+
+    addNewSeller = () => {
+      const contract = this.context.state.contract;
+      const account = this.context.state.accounts[0];
+      console.log('add user');
+      let user = contract.methods.addUser(true).send({from: account});
+      user.then(response => {
+        if(response.status == true && response.events.UserCreated){
+          toast.success('User Created Successfully');
+          this.props.history.push('/shop');
+        }else{
+          toast.error('User Creation Error');
+          
+        }
+      })
+
+     
+    }
+
+    addNewBuyer = () => {
+      const contract = this.context.state.contract;
+      const account = this.context.state.accounts[0];
+      let user = contract.methods.addUser(false).send({from: account});
+      user.then( response =>{
+        if(response.status == true && response.events.UserCreated){
+          toast.success('User Created Successfully');
+          this.props.history.push('/shop');
+        }else{
+          toast.error('User Creation Error');
+          
+        }
+      }
+
+      )
+     
+    }
+    buyerEntersShop = async () => {
       console.log('go to shop')
       this.context.updateContext("isBuyer" , true )
-      this.props.history.push('/shop');
+      const contract = this.context.state.contract;
+      const account = this.context.state.accounts[0];
+      let resp = await contract.methods.checkUser().call({from: account});
+      console.log('resp',resp);
+      if(resp && resp === true){
+        this.props.history.push('/shop');
+      }else{
+       this.addNewBuyer();
+      }
+    
     }
     
-    
+    enterAsAdmin = () =>{
+      this.context.updateContext("isAdmin" , true )
+      this.props.history.push('/shop'); 
+    }
+
     static contextType = UserContext;
 
     render() {
        console.log('context',this.context) 
         console.log('homeNav',this.props)
+        // if(this.props.baseAppState.isAdmin){
+        //   this.context.updateContext("isAdmin", true);
+        //   this.setState({isAdmin: true});
+        // }
         return (
             <div className="welcome">
               {/* <Navbar account={this.state.accounts ? this.state.accounts[0] : null}/> */}
-              <Navbar account={this.props.baseAppState.accounts[0]} admin={this.state.admin}/>
+              <Navbar account={this.props.baseAppState.accounts[0]} adminHandler={this.enterAsAdmin} 
+              admin={this.context.isAdmin}
+              seller={this.context.isSeller}
+              buyer={this.context.isBuyer}
+              />
               <Container>
               <Grid container spacing={2}>
                 <div className="container">

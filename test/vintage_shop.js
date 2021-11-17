@@ -20,13 +20,15 @@ contract("vintageShop", function ( accounts ) {
   const isBuyer = accounts[2];  
   const emptyAddress = "0x0000000000000000000000000000000000000000";
   const metadata = "ipfs://QmfAvnM89JrqvdhLymbU5sXoAukEJygSLk9cJMBPTyrmxo"
+  const carUrl = "https://gateway.pinata.cloud/ipfs/QmfAvnM89JrqvdhLymbU5sXoAukEJygSLk9cJMBPTyrmxo"
   const hash = "0x077e6a913a751f6cebd283470a0ab47ecff2e3e80c2dc089f031f909cd617df1"
   let instance;
   
   var carOne = {
     IPFShash: "0x077e6a913a751f6cebd283470a0ab47ecff2e3e80c2dc089f031f909cd617df1",
     hash: "",
-    _name: "Mercedez Benz ",
+    _name: "Mercedez Benz",
+    carUrl: "https://gateway.pinata.cloud/ipfs/QmfAvnM89JrqvdhLymbU5sXoAukEJygSLk9cJMBPTyrmxo",
     Model: "230 E",
     price: 400,
     commission: 10,
@@ -143,7 +145,7 @@ contract("vintageShop", function ( accounts ) {
           assert.equal(verifySeller.logs[0].event, "SellerVerified", "seller verification emitted right event");
          const result = await instance.awardItem(isSeller, hash, metadata, {from: isSeller});
         //  console.log('resultNFT', result)
-          const tx = await instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, {from: isSeller});
+          const tx = await instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, carOne.carUrl, {from: isSeller});
           console.log('resultaddNFT', tx)
           if(tx.logs[1].event == "ForSale"){
             eventEmitted = true
@@ -161,7 +163,7 @@ contract("vintageShop", function ( accounts ) {
           await instance.addUser(true,{from: isSeller});
           await instance.assignAsSeller(isSeller, {from: admin});
           await instance.awardItem(isSeller, hash, metadata, {from: isSeller});
-          await catchRevert(instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, {from: isBuyer}));
+          await catchRevert(instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, carOne.carUrl, {from: isBuyer}));
         });
         it("should allow a buyer to purchase NFT and update state accordingly ", async () =>{
           // console.log('selle', isSeller);
@@ -173,21 +175,48 @@ contract("vintageShop", function ( accounts ) {
           var buyerBalanceBefore = await web3.eth.getBalance(isBuyer);
           var adminBalancebefore = await web3.eth.getBalance(admin);
 
-          console.log('befores', sellerBalanceBefore);
-          console.log('beforb', buyerBalanceBefore);
-          console.log('beforb', adminBalancebefore);
+       
           await instance.assignAsSeller(isSeller, {from: admin});
           await instance.awardItem(isSeller, hash, metadata, {from: isSeller});
-          await instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, {from: isSeller});
+          await instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, carOne.carUrl, {from: isSeller});
 
           await instance.purchaseNFT(tokenId, { from: isBuyer, value: excessAmount });
 
           var sellerBalanceAfter = await web3.eth.getBalance(isSeller);
           var buyerBalanceAfter = await web3.eth.getBalance(isBuyer);
           var adminBalanceAfter = await web3.eth.getBalance(admin);
-          console.log('afters', sellerBalanceAfter);
-          console.log('afterb', buyerBalanceAfter);
-          console.log('afterb', adminBalanceAfter);
+         
+        });
+        it("should allow admin to pay seller", async () => {
+          const tokenId = new BN('1');
+          await instance.addUser(true,{from: isSeller});
+          await instance.addUser(false,{from: isBuyer});
+          
+          var sellerBalanceBefore = await web3.eth.getBalance(isSeller);
+          var buyerBalanceBefore = await web3.eth.getBalance(isBuyer);
+          var adminBalancebefore = await web3.eth.getBalance(admin);
+          console.log('before', sellerBalanceBefore)
+          console.log('before2adm', adminBalancebefore)
+          
+       
+          await instance.assignAsSeller(isSeller, {from: admin});
+          await instance.awardItem(isSeller, hash, metadata, {from: isSeller});
+          await instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, carOne.carUrl, {from: isSeller});
+
+          await instance.purchaseNFT(tokenId, { from: isBuyer, value: excessAmount });
+          await instance.sendTo(isSeller, carOne.price, {from: admin, value: excessAmount});
+          var afterBalanceBefore = await web3.eth.getBalance(isSeller);
+          console.log('after', afterBalanceBefore)
+        })
+        it("show retun a list of cars forsale", async () => {
+          const tokenId = new BN('1');
+          await instance.addUser(true,{from: isSeller});
+          await instance.addUser(false,{from: isBuyer});
+          await instance.assignAsSeller(isSeller, {from: admin});
+          await instance.awardItem(isSeller, hash, metadata, {from: isSeller});
+          await instance.addNFT(tokenId, carOne.price, carOne._name, carOne.Model, carOne.carUrl, {from: isSeller});
+         const result = await instance.getCarForSale();
+         console.log('forsale', result)
         });
       })
     })
