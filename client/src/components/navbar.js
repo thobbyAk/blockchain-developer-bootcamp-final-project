@@ -38,22 +38,25 @@ const Navbar = (props) => {
     useEffect(() => {
         setDefaultAccount(props.account);
         console.log('default account', props )
+
       });
-    const HandleConnect = () =>{
-        if(window.ethereum){
-            //metamask is installed
-            window.ethereum.request({method: 'eth_requestAccounts'})
-            .then(result =>{
-                accountChangeHandler(result[0]);
+    // const HandleConnect = () =>{
+    //     if(window.ethereum){
+    //         //metamask is installed
+    //         window.ethereum.request({method: 'eth_requestAccounts'})
+    //         .then(result =>{
+    //             accountChangeHandler(result[0]);
                 
 
-            })
-        }else{
-            setAlert(true);
-        }
+    //         })
+    //     }else{
+    //         setAlert(true);
+    //     }
 
-    console.log("connect to metamask")
-    }
+    // console.log("connect to metamask")
+    // }
+
+
     const alertChangeHandler = (stat) =>{
         setAlert(stat)
     }
@@ -62,19 +65,29 @@ const Navbar = (props) => {
         
 
     }
+    const handleAdmin = () =>{
+        props.adminHandler()
+    }
 
     const chainChangedHandler = () =>{
         window.location.reload();
     }
-    window.ethereum.on('accountsChanged',accountChangeHandler);
+    // window.ethereum.on('accountsChanged',accountChangeHandler);
     
-    window.ethereum.on('chainChanged',chainChangedHandler);
+    // window.ethereum.on('chainChanged',chainChangedHandler);
 
     return (
         
         <div >
         <AppBar className={classes.top} position="static">
             <Toolbar>
+                
+                    <Button
+                    color="inherit"
+                     onClick = { () => handleAdmin()} className={classes.root}>
+                        ADMIN
+                    </Button>
+              
             <IconButton className={classes.root}>
                 <AddShoppingCartIcon className={classes.shop}/>
             </IconButton>
@@ -95,31 +108,39 @@ const Navbar = (props) => {
             
           </Typography> 
           {
-              props.admin ?
+              props.seller ?
               <Button
               color="inherit"
+                
                 className={classes.root}>
-                  Admin
+                  Selller
               </Button>
                : 
+              ''
+          }
+        {
+              props.buyer ?
               <Button
               color="inherit"
-               onClick = { () => HandleConnect()} className={classes.root}>
-                  ADMIN
+                
+                className={classes.root}>
+                  Buyer
               </Button>
+               : 
+              ''
           }
             
             </div>
             
             </Toolbar>
-            {
+            {/* {
                 alert ? <Alert severity="warning">
                         <AlertTitle>Connection Error</AlertTitle>
                         Please Install Metamask— <strong>check it out!</strong>
 
                         </Alert> 
                 : null
-            }
+            } */}
         </AppBar>  
         </div>
     )

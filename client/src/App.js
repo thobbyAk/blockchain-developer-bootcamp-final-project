@@ -4,11 +4,13 @@ import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import VintageShopContract from "./contracts/VintageShop.json";
 import getWeb3 from "./getWeb3";
 import {MyProvider, UserContext} from "./utils/context/userContext";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import "./App.css";
 import Home from "./pages/home";
 import Shop from "./pages/shop";
-
+toast.configure()
 class App extends Component {
   constructor(props){
     super(props);
@@ -45,7 +47,7 @@ class App extends Component {
      console.log('accounts', accounts);
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, () =>this.userSignin());
+      this.setState({ web3, accounts, contract: instance }, () =>this.adminSignin());
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -73,30 +75,26 @@ class App extends Component {
     // this.setState({ storageValue: response });
     console.log('testcd')
   };
-  userSignin = () =>{
+  adminSignin = () =>{
     // sign user in
     const { accounts, contract } = this.state;
-    let user = contract.methods.getUser().call({from: accounts[0]});
+    let user = contract.methods.getAdmin().call({from: accounts[0]});
     user.then(response => {
       //authentication is successful
       console.log('user: ',response);
 
-      // if(response && response[0] === true){
-      //   this.setState({isAuthorized: true});
-      //   localStorage.setItem('isAuthenticated', true);
-      //   // admin check
-      //   if(response[2] === true){
-      //     this.setState({isAdmin: true});
-      //   }
-      //   //is seller
-      //   else if(response[1] === true){
-      //     this.setState({isSeller: true});
-      //   }
-      //   else{
-      //     this.setState({isReader: true});
-      //   }
-      //   this.setState({pageLoading: false});
-      // }
+      if(response && response[0] === true){
+        this.setState({isAuthorized: true});
+        localStorage.setItem('isAuthenticated', true);
+        // admin check
+        if(response[1] === true){
+          this.setState({isAdmin: true});
+          console.log('admin setter')
+        }
+        
+     
+        // this.setState({pageLoading: false});
+      }
     }).catch(error=>{
       this.setState({isAuthorized: false});
       localStorage.setItem('isAuthenticated', false);

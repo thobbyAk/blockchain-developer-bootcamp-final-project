@@ -34,3 +34,36 @@ yes transactions have to be monitored in this data purchased.
 7. Buyer can see a ist of cars purchased
 8. seller can see a list of car listed for sales and their individual purchase status.
 
+# Directory Structure
+VintageShop (root)
++-- migrations
+|   +-- 1_initial_migration.js
+|   +-- 2_deploy_contracts.js 
+|
++-- public
+|
++-- src
+|   +-- abis
+|   +-- Component
+|   |   +-- Header.js
+|   |   +-- MetamaskConnectButton.js
+|   |
+|   +-- contracts
+|   |   +-- Migrations.sol
+|   |   +-- VintageShop.sol    
+|   |
+|   +-- App.js
+|   +-- App.css
+|   +-- index.css
+|   +-- index.js
+|
++-- test
+|   +-- vintage_shop.js    
+|
++-- truffle-config.js
++-- package.json
++-- .env.example
++-- avoiding_common_attacks.md
++-- design_pattern_decisions.md
++-- deployed_address.txt
+

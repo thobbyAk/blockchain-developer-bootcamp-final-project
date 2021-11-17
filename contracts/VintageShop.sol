@@ -13,6 +13,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
   // a variable to keep track of all the tokens we have issued
   Counters.Counter private _tokenIds;
   ERC721 public nftAddress;
+  uint256[] carsForsale;
 
   address payable public admin; //addres of the admin
 
@@ -46,7 +47,10 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
   mapping(uint256 => Car) public carToken;
 
-  mapping(uint256 => Car) public carSale;
+  mapping(uint256=> Car) mappedDetails;
+
+  //maps a users address to a users balance
+  mapping(address => uint) balances;
 
   // <enum State: ForSale, Sold, Shipped, Received>
   // the state tells the current state of the car 
@@ -67,6 +71,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
     address payable owner; //address of the vintage car owner to receive funds after pament is being made
     string name; // name of the car
     string model; //model or year of the car
+    string carUrl; //imageurl of the car
     uint price; // price of the car
     State state;
     uint120  purchasedCount; //number of car purchases
@@ -84,6 +89,12 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
     //logforsale for car added
     event ForSale(string message, uint _carId, address seller);
+
+    //check if user exists or is a new user
+    event UserExists(string message);
+
+    //emits when the users is a new user
+    event NewUser(string message);
 
     event Sold(string message, uint _carId, address buyer);
 
@@ -235,25 +246,26 @@ contract VintageShop is ERC721URIStorage, Ownable {
      * @param name Name of the car the seller wants to sell
      * @param model model of the car the seller wants to sell
      */
-     function addNFT(uint256 _tokenId, uint price, string memory name, string memory model)
+     function addNFT(uint256 _tokenId, uint price, string memory name, string memory model, string memory url)
       IsSellerVerified(msg.sender) VerifyNFTOwner(_tokenId) external{
         require(ownerOf(_tokenId) == msg.sender, "Only token owner can put up token for sell");
         setApprovalForAll(address(this), true);
         ownedTokens[msg.sender].push(_tokenId);
         uint newCarId = carDatabase[msg.sender].length + 1;
-        Car memory car;
-
-        car.tokenId = _tokenId;
-        car.carId = newCarId;
-        car.price = price;
-        car.name = name;
-        car.model = model;
-        car.state = State.ForSale;
-        car.owner = payable(msg.sender);
-        car.purchasedCount = 0;
-
-        carDatabase[msg.sender].push(car);
+        
         carToken[_tokenId].price = price;
+        mappedDetails[newCarId] = Car({
+          tokenId: _tokenId,
+          carId: newCarId,
+          price: price,
+          name: name,
+          carUrl: url,
+          model: model,
+          state: State.ForSale,
+          owner: payable(msg.sender),
+          purchasedCount: 0
+        });
+        carsForsale.push(_tokenId);
         emit ForSale("Car For sale", newCarId, msg.sender);
 
 
@@ -288,7 +300,8 @@ contract VintageShop is ERC721URIStorage, Ownable {
      function purchaseNFT (uint256 tokenId)
       isUserOrAdmin(msg.sender) hasEnough(tokenId) checkValue(tokenId) payable external {
         address payable seller = payable(ownerOf(tokenId));
-       
+        uint _price = carToken[tokenId].price;
+        balances[address(this)] +=_price;
         transferFrom(seller, msg.sender, tokenId);
         boughtTokens[msg.sender].push(tokenId);
         // carDatabase[seller][tokenId].state = State.Sold;
@@ -300,9 +313,11 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
     
     /**
-    * @dev send / withdraw _amount to seller
+    * @dev admin sends / withdraw _amount to seller
+       * @param _seller Address of the seller
+       * @param _amount Amount to send to the seller
     */
-    function sendTo(address payable _seller, uint256 _amount) public onlyOwner {
+    function sendTo(address payable _seller, uint256 _amount) payable external onlyOwner {
       require(_seller != address(0) && _seller != address(this));
       require(_amount > 0 && _amount <= address(this).balance);
       _seller.transfer(_amount);
@@ -314,7 +329,13 @@ contract VintageShop is ERC721URIStorage, Ownable {
     * @dev gets the cars forsale
     */ 
       function getCarForSale() public view returns(Car[] memory ){
+        Car[] memory details = new Car[](carsForsale.length);
 
+        for(uint256 x=0;x<carsForsale.length;x++){
+          details[x] = mappedDetails[carsForsale[x]];
+        }
+     
+      return details;
       }
         /**
      * @dev requests for tokens paid for by an existion user
@@ -330,15 +351,29 @@ contract VintageShop is ERC721URIStorage, Ownable {
       _ownedTokens = ownedTokens[_user];
     }
 
-      /**
-     * @dev Verify/Authenticate existing user 
+         /**
+     * @dev Checks if User exists before signing in user 
      */
-    function getUser() isUserOrAdmin(msg.sender) view external returns (bool _isAuth, bool _isAdmin, bool _isSeller) {
+    function checkUser() view external returns (bool _exists) {
+      if(users[msg.sender].userExists == 1){
+        _exists = true;
+      } else{
+        _exists = false;
+        // emit NewUser("this is a new user");
+      }
+      return _exists;
+      
+    }
+
+      /**
+     * @dev Verify/Authenticate Admin
+     */
+    function getAdmin() view external returns (bool _isAuth, bool _isAdmin ) {
       _isAuth = true;
       if(msg.sender == admin){
         _isAdmin = true;
       }
-      _isSeller = users[msg.sender].isSeller;
+     
     }
   
 
