@@ -1,11 +1,10 @@
 # blockchain-developer-bootcamp-final-project
 #  Vintage Car Salses Shop
 
-``
+
 ## Overview
-    A Blockchain sales shop  which allows vintage car owners(sellers) to upload vintage car onwners to upload their car picture, mint as NFT. Put this NFT up for sale by assigning a name, model and IPF generated URL for car image to it. A buyer is able to register as a buyer abd purchase this token with eth. The eth is transfered to the contract address and only the admin has the power to credit the seller and transfer the ownership of the token to the buyer
-``
----
+A Blockchain sales shop  which allows vintage car owners(sellers) to upload vintage car onwners to upload their car picture, mint as NFT. Put this NFT up for sale by assigning a name, model and IPF generated URL for car image to it. A buyer is able to register as a buyer abd purchase this token with eth. The eth is transfered to the contract address and only the admin has the power to credit the seller and transfer the ownership of the token to the buyer
+
 ## Administator
     The sales shop Admin deploys contract,Admin verifies a seller. an unverified seller is unble to upload an NFT for sale. Admin credits a seller for a puechased token by the buyer.
 
