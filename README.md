@@ -73,5 +73,5 @@ VintageShop (root)
 +-- package.json
 +-- avoiding_common_attacks.md
 +-- design_pattern_decisions.md
-+-- deployed_address.txt
++-- deployed_address.txt.
 
