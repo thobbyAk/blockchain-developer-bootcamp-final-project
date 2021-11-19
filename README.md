@@ -39,7 +39,8 @@ yes transactions have to be monitored in this data purchased.
 
 
 # Directory Structure
-```bash
+$ tree 
+---
 VintageShop (root)
 +-- migrations
 |   +-- 1_initial_migration.js
