@@ -70,8 +70,8 @@ export class shop extends Component {
         window.web3 = new Web3(window.ethereum);
        const res =  await window.ethereum.enable();
        console.log('res', res);
-       if(this.context.state.isBuyer){
-        this.getNFTForSale();
+       if(this.context.state.isBuyer === true){
+            this.getNFTForSale();
 
        }
        
@@ -570,7 +570,7 @@ export class shop extends Component {
                                                         <Button  
                                                         onClick={(e) => this.uploadNFTForSale(e)}
                                                         variant="contained" color="primary" component="span">
-                                                            Approve
+                                                            UPLOAD FOR SALE
                                                         </Button>
                                                         {/* {this.state.loading.approveSeller ? <Loader type={'spinningBubbles'} size={'small'} color={'#556cd6'} />: null}    */}
                                                     </Box>                                                                                                     

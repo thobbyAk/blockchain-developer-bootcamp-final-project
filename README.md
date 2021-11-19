@@ -1,17 +1,19 @@
 # blockchain-developer-bootcamp-final-project
 #  Vintage Car Salses Shop
-#  Overview:
-    A Blockchain sales shop  which allows vintage car owners(sellers) to upload vintage car models on Ipfs, then mint as NFT, a price to it and it can be purchased by a buyer using cryptocurrency. 
 
-# Administator:
-    The sales shop Admin deploys contract. Admin also approves car owners (sellers) to add cars and receieve funds.
+# Overview:
+    A Blockchain sales shop  which allows vintage car owners(sellers) to upload vintage car onwners to upload their car picture, mint as NFT. Put this NFT up for sale by assigning a name, model and IPF generated URL for car image to it. A buyer is able to register as a buyer abd purchase this token with eth. The eth is transfered to the contract address and only the admin has the power to credit the seller and transfer the ownership of the token to the buyer
 
-# Car Onwer(seller):
-    A vintage car owner without having to consult a third party or car sales man can register an account on the blockchain and wait admin approval, once the seller is approved he can upload the car information and car pictures then mint as NFT. The seller can monitor the sales and upload more cars in the case where there the seller has more vintage cars for sale.
+# Administator
+    The sales shop Admin deploys contract,Admin verifies a seller. an unverified seller is unble to upload an NFT for sale. Admin credits a seller for a puechased token by the buyer.
+
+# Car Onwer(seller)
+    A vintage car owner without having to consult a third party or car sales man can register an account on the blockchain and wait admin approval, once the seller is approved he can mint his car picture as NFT, then put the token up for sale by assigning a price to it.The seller can upload more cars in the case where there the seller has more vintage cars for sale.
 
 
-# Buyer:
-    The buyer gets to purchase a vintage car from  a trusted protocol where the buyer can be sure the car wasnt stolen. The buyer registers an account on the blockchain and get approved by the admin.
+
+# Buyer
+    The buyer signs in and sees list of vintage car NFT availiable for sale. The buyer is able to purchase the NFT with eth.
 
 # Questions
 1. Database needed?
@@ -25,15 +27,16 @@ No, a third party cannot be trusted with the car infomation and money.
 yes transactions have to be monitored in this data purchased.
 
 # Workflow
-1. Admin deploys a car with minimum commision over cars.
+1. Admin deploys the contract.
 2. Seller Registers an account on the blockchain.
-3. Seller uploads car information.
-4  Seller mints car as NFT.
-4. seller assings a forsale state for the NFT
-4. Buyer registers an account on the blockchain.
-5. The buyer can ppurchase an NFT.
-7. Buyer can see a list of cars purchased
-9. seller can see a list of car listed for sales and their individual purchase status.
+3. Admin approves the seller
+4. Seller mints vintage car picture as NFT and recieves a tokenId and IPFS url for the image uploaded.
+5. Seller assigns a name, model, price and IPFS url to this token and uploads it up for sale.
+6. Buyer Register an account on the blockchain and sees a list of cars NFT uploaded up for sale by the seller.
+7. Buyer is able to purchase the NFT.
+8. The token Price is transfred to the contract address
+9. Admin can credit the seller based on the token purchased by the buyer. 
+
 
 # Directory Structure
 VintageShop (root)

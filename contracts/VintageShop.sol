@@ -43,10 +43,12 @@ contract VintageShop is ERC721URIStorage, Ownable {
   // lists of cars owned by users [sellers]
   mapping (address => uint256[]) private ownedTokens;
 
+  //maps each car minted as NFT is stored in the car database
   mapping(address => Car[]) public carDatabase;
 
   mapping(uint256 => Car) public carToken;
 
+  //maps each car minted as NFT to its details such as: name, imageurl,model asnd price
   mapping(uint256=> Car) mappedDetails;
 
   //maps a users address to a users balance
@@ -95,17 +97,22 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
     //emits when the users is a new user
     event NewUser(string message);
-
+   //emits when a car is sold
     event Sold(string message, uint _carId, address buyer);
-
+    //emits when a car is successfully minted as an NFT
     event Minted(string message , uint _tokenId);
-
+    //emits when the car price is recieved by the contract address
     event Received(address buyer, uint _tokenId, uint amount, uint balance);
-
+   
+    //emits when a seller is credited by the the admin from the contract
     event Sent(address seller, uint256 amount, uint256 balance);
 
   //modifiers
   //verify that the caller of the function is an admin
+  /** 
+     
+     * @param _address address of user
+     */
   modifier isAdmin(address _address){
     require(_address == admin, "caller must be an admin");
     _;
@@ -114,7 +121,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
   //verify if the caller of the function is an admin or user;
    /** 
      * @dev checks if the caller is a user or an admin
-     * @param _address Is new user a car owner?
+     * @param _address address of user
      */
   modifier isUserOrAdmin(address _address){
     require(_address == admin || users[_address].userExists == 1, "user does not exist");
@@ -123,7 +130,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
    /** 
      * @dev checks is seller is verified to sell
-     * @param _address Is new user a car owner?
+     * @param _address address of user?
      */
   modifier IsSellerVerified(address _address){
     require(users[_address].isSeller && users[_address].isSellerVerified, "user is not a seller or is not verified" );
@@ -204,7 +211,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
 
    /** 
      * @dev Admin verifies a user by assigning isSeller verified to a seller
-     * @param _userAddress Is new user a car owner?
+     * @param _userAddress address of user to be assigned as seller
      */
   function assignAsSeller(address _userAddress) isAdmin(msg.sender) external {
     if(users[_userAddress].isSeller){
@@ -294,7 +301,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
       /** 
      * @dev Buyer buys the NFT up forsale
      * @dev the state is updated to sold
-     * @param tokenId Token to be Sold
+     * @param tokenId Id of Token to be Sold
 
      */
      function purchaseNFT (uint256 tokenId)
@@ -326,7 +333,7 @@ contract VintageShop is ERC721URIStorage, Ownable {
   
 
         /**
-    * @dev gets the cars forsale
+    * @dev gets the cars avaialable  forsale
     */ 
       function getCarForSale() public view returns(Car[] memory ){
         Car[] memory details = new Car[](carsForsale.length);
@@ -337,20 +344,15 @@ contract VintageShop is ERC721URIStorage, Ownable {
      
       return details;
       }
-        /**
-     * @dev requests for tokens paid for by an existion user
-     */
-      function getPurchasedTokens(address _user) userExists(_user) view public returns(uint256[] memory _boughtTokens ){
-        _boughtTokens = boughtTokens[_user];
-      }
+    //     /**
+    //  * @dev requests for tokens paid for by an existion user
+    //  */
+      // TO DO: fetching images tied to each token  and returning it whith the array
+    //   function getPurchasedTokens(address _user) userExists(_user) view public returns(uint256[] memory _boughtTokens ){
+    //     _boughtTokens = boughtTokens[_user];
+    //   }
       
-          /**
-     * @dev requests for tokens owned by an existion user
-     */
-     function getOwnedTokens(address _user) userExists(_user) view public returns(uint256[] memory _ownedTokens ){
-      _ownedTokens = ownedTokens[_user];
-    }
-
+   
          /**
      * @dev Checks if User exists before signing in user 
      */
