@@ -13,5 +13,5 @@ The contract applies the following measures to avoid common security pitfalls:
 * Use ``require`` to check sender's balances and allowances, where applicable
 * The software does not check the return value from a method or function, which can prevent it from detecting unexpected states and conditions. [SWC-104](https://swcregistry.io/docs/SWC-104, "swc-104")
 * The use of ``revert()``, and ``require()`` in Solidity, and the new REVERT opcode in the EVM. [SWC-110](https://swcregistry.io/docs/SWC-110, "swc-110")
-* Use Openzeppelin's Address library to validate ERC721(ownerOf) token contract addresses (ownerOf() function).
+* Use Openzeppelin's Address library to validate ERC721 token contract addresses (ownerOf() function).
 * Denial of Service with Failed Call[SWC-113](https://swcregistry.io/docs/SWC-113, "swc-113"): withdrawal payment design pattern was used in the ``purchaseNFT`` function and ``hasEnough``  ensuring that the buyer has enough and the contract wouldnt loose control if the transfer call kept reverting.
