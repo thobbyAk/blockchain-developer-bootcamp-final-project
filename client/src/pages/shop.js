@@ -59,7 +59,8 @@ export class shop extends Component {
             tokenModel:'',
             hashUrl:'',
             sellerAmount:'',
-            sales: []
+            sales: [],
+            purchased: []
             
         }
         this.handleCapture = this.handleCapture.bind(this);
@@ -72,6 +73,7 @@ export class shop extends Component {
        console.log('res', res);
        if(this.context.state.isBuyer === true){
             this.getNFTForSale();
+            this.getPurchasedNFT();
 
        }
        
@@ -121,28 +123,37 @@ export class shop extends Component {
         }); 
     }
 
-    creditSeller=(event)=>{
+    creditSeller = async (event)=>{
         event.preventDefault();
         const contract = this.context.state.contract;
         const account = this.context.state.accounts[0];
         const web3 = new Web3(window.ethereum);
         const withdrawAmount = web3.utils.toWei(this.state.sellerAmount,'ether');
-        let response = contract.methods.sendTo(this.state.sellerAddressToApprove, withdrawAmount).send({from: account, value: withdrawAmount});
-        response.then(result => {
-            console.log('seller credit: ', result);
-            if(result.status && result.events.Sent){
+        let response = await contract.methods.sendTo(this.state.sellerAddressToApprove, withdrawAmount).send({from: account, value: withdrawAmount});
+            if(response.status && response.events.Sent){
 
-                 toast.success('Seller Credited Successfully');
+                toast.success('Seller Credited Successfully');
 
             }else{
                 toast.error('An Error Occured');
-          
+            
             }
-        }).catch(error=>{
-                toast.error('seller approval error:')
-                  console.log('seller approval error: ', error);
+       
+        // response.then(result => {
+        //     console.log('seller credit: ', result);
+        //     if(result.status && result.events.Sent){
+
+        //          toast.success('Seller Credited Successfully');
+
+        //     }else{
+        //         toast.error('An Error Occured');
+          
+        //     }
+        // }).catch(error=>{
+        //         toast.error('seller approval error:')
+        //           console.log('seller approval error: ', error);
            
-        }); 
+        // }); 
     }
 
     handleNFTInput =(event)=> {
@@ -253,19 +264,36 @@ export class shop extends Component {
         const contract = this.context.state.contract;
         const account = this.context.state.accounts[0];
         const amount = web3.utils.toWei(sale.price,'ether');
-        let response = contract.methods.purchaseNFT(sale.tokenId).send({from: account,value: amount});
+        let response = await contract.methods.purchaseNFT(sale.tokenId).send({from: account,value: amount});
   
         console.log('sold',response)
-       response.then(result => {
-           if(result && result.event.Received){
-                toast.success('Transaction successful');
-           }else{
+        if(response && response.events.Received){
+            toast.success('Transaction successful');
+            this.getPurchasedNFT();
+        }else{
                 toast.error('An Error Occured');
-           }
-       })
+
+        }
+    //    response.then(result => {
+    //        if(result && result.event.Received){
+    //             toast.success('Transaction successful');
+    //        }else{
+    //             toast.error('An Error Occured');
+    //        }
+    //    })
         
     }
-
+    getPurchasedNFT = () => {
+        const contract = this.context.state.contract;
+        const account = this.context.state.accounts[0];
+        let response = contract.methods.getPurchasedTokens(account).call({from: account});
+        response.then(result => {
+            console.log('bought', result);
+            this.setState({
+                purchased: result
+            })
+        })
+    }
 
     getNFTForSale = () => {
         
@@ -395,7 +423,7 @@ export class shop extends Component {
                                                     <Box mt={2}>
                                                         <Grid container spacing={2}>
                                                             <Grid item md={12} sm={12}>
-                                                                <TextField onChange={this.sellerAddressHandler} id="" required={true} label="Address of seller to approve" variant="outlined" fullWidth={true}/>
+                                                                <TextField onChange={this.sellerAddressHandler} id="" required={true} label="Address of seller to credit" variant="outlined" fullWidth={true}/>
                                                             </Grid>                                                            
                                                         </Grid>
                                                     </Box> 
@@ -603,19 +631,19 @@ export class shop extends Component {
                         <Card ml={3} style={{marginRight:'15px'}}>
                             <CardMedia
                                 component="img"
-                                height="140"
+                                height="100"
                                 image={sale.carUrl}
                                 alt="green iguana"
                             />
                             <CardContent>
                                 <Typography  variant="h5" component="div">
-                                {sale.name}
+                                NFT Name: {sale.name}
                                 </Typography>
                                 <Typography variant="body2" color="secondary">
-                                {sale.model}
+                                Car Model: {sale.model}
                                 </Typography>
                                 <Typography variant="body2" color="secondary">
-                                {sale.price}
+                                Price in Eth: {sale.price}
                                 </Typography>
                             </CardContent>
                             <CardActions>
@@ -655,10 +683,19 @@ export class shop extends Component {
                         
                     </Box>
                  </Grid> */}
-                
+                  <h6 className="title">List of purchased Tokens</h6>
+                  {
+                      this.state.purchased.length === 0 ?
+                      <p class="text-white"> You currently have no purchased Token </p>:
+                      ''
+                  }
+                  {this.state.purchased.map((token, index) => (
+                    <p class="text-white" key={index}>Token ID:{token} </p>
+
+                  ))}
                 
                  </Container>
-                <p>this is the shop</p>
+                {/* <p>this is the shop</p> */}
                 </div>
             )
         }else{

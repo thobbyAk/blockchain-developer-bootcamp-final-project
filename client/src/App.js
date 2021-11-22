@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+// import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import VintageShopContract from "./contracts/VintageShop.json";
 import getWeb3 from "./getWeb3";
 import {MyProvider, UserContext} from "./utils/context/userContext";
@@ -30,6 +30,15 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
+
+    if(window.ethereum) {
+      window.ethereum.on('chainChanged', () => {
+        window.location.reload();
+      })
+      window.ethereum.on('accountsChanged', () => {
+        window.location.reload();
+      })
+  }
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
@@ -51,7 +60,7 @@ class App extends Component {
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
+        `Failed to load web3, accounts, or contract. please make sure that your metamask is connnected to  network  .`,
       );
       this.setState({
         noWallet: true
@@ -60,6 +69,8 @@ class App extends Component {
       console.error(error);
     }
   };
+
+    
 
   runExample = async () => {
   
@@ -75,6 +86,10 @@ class App extends Component {
     // this.setState({ storageValue: response });
     console.log('testcd')
   };
+  accountChangeHandler = () => {
+    window.location.reload();
+  }
+
   adminSignin = () =>{
     // sign user in
     const { accounts, contract } = this.state;
@@ -102,6 +117,8 @@ class App extends Component {
     })   
     
   }
+
+  // window.ether
   
   render() {
     console.log('context',this.context) 

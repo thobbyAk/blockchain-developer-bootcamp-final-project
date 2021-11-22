@@ -3,7 +3,7 @@
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@openzeppelin/contracts": "^4.3.2",
     "@openzeppelin/test-helpers": "^0.5.15",
-    "@truffle/hdwallet-provider": "^1.5.1",
+    "@truffle/hdwallet-provider": "^1.7.0",
     "dotenv": "^10.0.0",
     "ganache": "^6.4.5",
     "mnemonics": "^1.1.3"
