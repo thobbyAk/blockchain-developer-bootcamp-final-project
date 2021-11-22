@@ -308,7 +308,8 @@ contract VintageShop is ERC721URIStorage, Ownable {
       isUserOrAdmin(msg.sender) hasEnough(tokenId) checkValue(tokenId) payable external {
         address payable seller = payable(ownerOf(tokenId));
         uint _price = carToken[tokenId].price;
-        balances[address(this)] +=_price;
+        // balances[address(this)] +=_price;
+        admin.transfer(_price);
         transferFrom(seller, msg.sender, tokenId);
         boughtTokens[msg.sender].push(tokenId);
         // carDatabase[seller][tokenId].state = State.Sold;
@@ -344,13 +345,13 @@ contract VintageShop is ERC721URIStorage, Ownable {
      
       return details;
       }
-    //     /**
-    //  * @dev requests for tokens paid for by an existion user
-    //  */
+        /**
+     * @dev requests for tokens paid for by an existion user
+     */
       // TO DO: fetching images tied to each token  and returning it whith the array
-    //   function getPurchasedTokens(address _user) userExists(_user) view public returns(uint256[] memory _boughtTokens ){
-    //     _boughtTokens = boughtTokens[_user];
-    //   }
+      function getPurchasedTokens(address _user) userExists(_user) view public returns(uint256[] memory _boughtTokens ){
+        _boughtTokens = boughtTokens[_user];
+      }
       
    
          /**

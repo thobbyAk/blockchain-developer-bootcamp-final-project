@@ -38,6 +38,7 @@ yes transactions have to be monitored in this data purchased.
 8. The token Price is transfred to the contract address
 9. Admin can credit the seller based on the token purchased by the buyer. 
 
+contract address:0x83E144BF8388AeC3dFDBaFbfbb19563029ae6B6F
 
 # Directory Structure
  ```
