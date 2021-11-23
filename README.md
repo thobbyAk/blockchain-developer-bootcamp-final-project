@@ -40,6 +40,9 @@ yes transactions have to be monitored in this data purchased.
 
 contract address:0x83E144BF8388AeC3dFDBaFbfbb19563029ae6B6F
 
+## Interact via Ropsten
+    The contract is deloyed on the Ropsten network, please  connect to the ropsten network
+
 # Directory Structure
  ```
 VintageShop (root)
@@ -78,3 +81,41 @@ VintageShop (root)
 +-- design_pattern_decisions.md
 +-- deployed_address.txt.
 ```
+# Dependencies
+To run the Dapp in a local enviroment, the following dependencies are required:
+* at least Node v7.21.1
+    * download Node: https://nodejs.org/en/download/
+* Truffle : `npm i -g truffle`
+* HDWallet provider: `npm i @truffle/hdwallet-provider`
+* Openzeppelin contracts and libraries: `npm i @openzeppelin/contracts` , `npm i @openzeppelin/contracts`
+* ganache : `npm install -g ganache-cli`
+* mnemonics: `npm i mnemonics`
+* Utils: 
+    * .env file : `npm i dotenv`
+
+
+# How to setup Dapp 
+## smart contract
+* contacts can be found in `/contracts`
+
+Follow the following steps to test smartcontract
+* Navigate to root folder /
+* run `npm install` in the terminal to install all dependencies
+* run `truffle develop` 
+* compile contracts by running `compile`
+* Compile and Deploy contracts `truffle migrate --network develop`
+* compile, deploy contract and test `truffle test`
+
+## FrontEnd 
+
+* Navigate to the client folder `cd client`
+* run `npm install` to install all dependencies
+* Launch the user interface via port: 3000 by running the following command in the `client` folder by running `npm run start`
+* Access the user interface via `http://localhost:3000`
+* If you do not have Metamask browser extension, install `Metamask` in your browser. Connect your Metamask wallet  on the `localhost` network ans start interracting with the app.
+
+`Note an already purchased Car(NFT) cannot be purchased by another buyer yet, this is a feature i am still working on and hoping to add as an update`
+
+
+
+
