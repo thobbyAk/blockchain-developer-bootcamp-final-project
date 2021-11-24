@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/vintageShop/static/css/main.e44bf5de.chunk.css",
+    "main.js": "/vintageShop/static/js/main.d22980eb.chunk.js",
+    "main.js.map": "/vintageShop/static/js/main.d22980eb.chunk.js.map",
+    "runtime-main.js": "/vintageShop/static/js/runtime-main.22cde5fe.js",
+    "runtime-main.js.map": "/vintageShop/static/js/runtime-main.22cde5fe.js.map",
+    "static/css/2.d4e5b912.chunk.css": "/vintageShop/static/css/2.d4e5b912.chunk.css",
+    "static/js/2.8f4d141e.chunk.js": "/vintageShop/static/js/2.8f4d141e.chunk.js",
+    "static/js/2.8f4d141e.chunk.js.map": "/vintageShop/static/js/2.8f4d141e.chunk.js.map",
+    "index.html": "/vintageShop/index.html",
+    "precache-manifest.f62aae5b18a6b8b2a02928b73b8dca45.js": "/vintageShop/precache-manifest.f62aae5b18a6b8b2a02928b73b8dca45.js",
+    "service-worker.js": "/vintageShop/service-worker.js",
+    "static/css/2.d4e5b912.chunk.css.map": "/vintageShop/static/css/2.d4e5b912.chunk.css.map",
+    "static/css/main.e44bf5de.chunk.css.map": "/vintageShop/static/css/main.e44bf5de.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.22cde5fe.js",
+    "static/css/2.d4e5b912.chunk.css",
+    "static/js/2.8f4d141e.chunk.js",
+    "static/css/main.e44bf5de.chunk.css",
+    "static/js/main.d22980eb.chunk.js"
+  ]
+}
