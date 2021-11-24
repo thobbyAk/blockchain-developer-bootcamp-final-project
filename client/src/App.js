@@ -60,7 +60,7 @@ class App extends Component {
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
-        `Failed to load web3, accounts, or contract. please make sure that your metamask is connnected to  network  .`,
+        `Failed to load web3, accounts, or contract. please make sure that you have metamask installed on your browser is connnected to Ropsten network  .`,
       );
       this.setState({
         noWallet: true
