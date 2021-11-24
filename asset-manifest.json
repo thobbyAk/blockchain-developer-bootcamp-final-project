@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/vintageShop/static/css/main.e44bf5de.chunk.css",
-    "main.js": "/vintageShop/static/js/main.d22980eb.chunk.js",
-    "main.js.map": "/vintageShop/static/js/main.d22980eb.chunk.js.map",
-    "runtime-main.js": "/vintageShop/static/js/runtime-main.22cde5fe.js",
-    "runtime-main.js.map": "/vintageShop/static/js/runtime-main.22cde5fe.js.map",
-    "static/css/2.d4e5b912.chunk.css": "/vintageShop/static/css/2.d4e5b912.chunk.css",
-    "static/js/2.8f4d141e.chunk.js": "/vintageShop/static/js/2.8f4d141e.chunk.js",
-    "static/js/2.8f4d141e.chunk.js.map": "/vintageShop/static/js/2.8f4d141e.chunk.js.map",
-    "index.html": "/vintageShop/index.html",
-    "precache-manifest.f62aae5b18a6b8b2a02928b73b8dca45.js": "/vintageShop/precache-manifest.f62aae5b18a6b8b2a02928b73b8dca45.js",
-    "service-worker.js": "/vintageShop/service-worker.js",
-    "static/css/2.d4e5b912.chunk.css.map": "/vintageShop/static/css/2.d4e5b912.chunk.css.map",
-    "static/css/main.e44bf5de.chunk.css.map": "/vintageShop/static/css/main.e44bf5de.chunk.css.map"
+    "main.css": "/blockchain-developer-bootcamp-final-project/static/css/main.e44bf5de.chunk.css",
+    "main.js": "/blockchain-developer-bootcamp-final-project/static/js/main.1cfc96d8.chunk.js",
+    "main.js.map": "/blockchain-developer-bootcamp-final-project/static/js/main.1cfc96d8.chunk.js.map",
+    "runtime-main.js": "/blockchain-developer-bootcamp-final-project/static/js/runtime-main.dca84915.js",
+    "runtime-main.js.map": "/blockchain-developer-bootcamp-final-project/static/js/runtime-main.dca84915.js.map",
+    "static/css/2.d4e5b912.chunk.css": "/blockchain-developer-bootcamp-final-project/static/css/2.d4e5b912.chunk.css",
+    "static/js/2.8f4d141e.chunk.js": "/blockchain-developer-bootcamp-final-project/static/js/2.8f4d141e.chunk.js",
+    "static/js/2.8f4d141e.chunk.js.map": "/blockchain-developer-bootcamp-final-project/static/js/2.8f4d141e.chunk.js.map",
+    "index.html": "/blockchain-developer-bootcamp-final-project/index.html",
+    "precache-manifest.415ff756ab506efb408a7f83e121305a.js": "/blockchain-developer-bootcamp-final-project/precache-manifest.415ff756ab506efb408a7f83e121305a.js",
+    "service-worker.js": "/blockchain-developer-bootcamp-final-project/service-worker.js",
+    "static/css/2.d4e5b912.chunk.css.map": "/blockchain-developer-bootcamp-final-project/static/css/2.d4e5b912.chunk.css.map",
+    "static/css/main.e44bf5de.chunk.css.map": "/blockchain-developer-bootcamp-final-project/static/css/main.e44bf5de.chunk.css.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.22cde5fe.js",
+    "static/js/runtime-main.dca84915.js",
     "static/css/2.d4e5b912.chunk.css",
     "static/js/2.8f4d141e.chunk.js",
     "static/css/main.e44bf5de.chunk.css",
-    "static/js/main.d22980eb.chunk.js"
+    "static/js/main.1cfc96d8.chunk.js"
   ]
 }
