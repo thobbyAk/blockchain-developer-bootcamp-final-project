@@ -39,9 +39,11 @@ yes transactions have to be monitored in this data purchased.
 9. Admin can credit the seller based on the token purchased by the buyer. 
 
 ---
- [Deployed Website](https://thobbyak.github.io/blockchain-developer-bootcamp-final-project/, "Deployed Website")
+ Deployed Website: https://thobbyak.github.io/blockchain-developer-bootcamp-final-project/
 ---
 contract address:0x83E144BF8388AeC3dFDBaFbfbb19563029ae6B6F
+
+### Screencast Link: https://youtu.be/qahPlwlqE5w
 
 ## Interact via Ropsten
     The contract is deloyed on the Ropsten network, please  connect to the ropsten network
