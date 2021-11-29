@@ -3,10 +3,10 @@
 
 
 ## Overview
-A Blockchain sales shop  which allows vintage car owners(sellers) to upload vintage car onwners to upload their car picture, mint as NFT. Put this NFT up for sale by assigning a name, model and IPF generated URL for car image to it. A buyer is able to register as a buyer abd purchase this token with eth. The eth is transfered to the contract address and only the admin has the power to credit the seller and transfer the ownership of the token to the buyer
+A Blockchain sales shop  which allows vintage car owners(sellers) to upload a vintage car picture, mint as NFT. Put this NFT up for sale by assigning a name, model and IPFS generated URL for car image to it. A buyer is able to register as a buyer and purchase this token with eth. The eth is transfered to the contract address and only the admin has the power to credit the seller and transfer the ownership of the token to the buyer
 
 ## Administator
-The sales shop Admin deploys contract,Admin verifies a seller. an unverified seller is unble to upload an NFT for sale. Admin credits a seller for a puechased token by the buyer.
+The sales shop Admin deploys contract, Admin verifies a seller. an unverified seller is unble to upload an NFT for sale. Admin credits a seller for a purchased token by the buyer.
 
 ## Car Onwer(seller)
 A vintage car owner without having to consult a third party or car sales man can register an account on the blockchain and wait admin approval, once the seller is approved he can mint his car picture as NFT, then put the token up for sale by assigning a price to it.The seller can upload more cars in the case where there the seller has more vintage cars for sale.
