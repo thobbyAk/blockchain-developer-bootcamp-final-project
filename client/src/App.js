@@ -130,7 +130,7 @@ class App extends Component {
     return (
       
       <div className="App">
-        <BrowserRouter basename="/">
+        <BrowserRouter basename="/blockchain-developer-bootcamp-final-project">
         <MyProvider>
           <UserContext.Consumer>
             {(context) =>
