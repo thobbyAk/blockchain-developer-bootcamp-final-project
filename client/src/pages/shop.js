@@ -64,6 +64,8 @@ export class shop extends Component {
             
         }
         this.handleCapture = this.handleCapture.bind(this);
+        this.enterAsAdmin = this.enterAsAdmin.bind(this);
+
         // this.handleFileInput = this.handleFileInput(this);
     }
 
@@ -170,20 +172,20 @@ export class shop extends Component {
         event.preventDefault();
         const contract = this.context.state.contract;
         const account = this.context.state.accounts[0];
-        let response = contract.methods.addNFT(
+        let response = await contract.methods.addNFT(
             this.state.tokenId,
             this.state.tokenPrice,
             this.state.tokenCar,
             this.state.tokenModel,
             this.state.hashUrl).send({from:account});
-            response.then( result =>{
-                if(result.status && result.events.ForSale){
-                    toast.success('NFT Uploaded Forsale Successfully');   
-                }else{
-                    toast.error('NFT Uploaded Failed');   
+            
+            if(response.status && response.events.ForSale){
+                toast.success('NFT Uploaded Forsale Successfully');   
+            }else{
+                toast.error('NFT Uploaded Failed');   
 
-                }
-            })
+            }
+           
 
     }
 
@@ -220,34 +222,30 @@ export class shop extends Component {
 
     }
 
-    sendHashToContract= async ()=>{
+    sendHashToContract = async ()=>{
         const contract = this.context.state.contract;
         const account = this.context.state.accounts[0];
-        let response = contract.methods.awardItem(account, this.state.ipfsHash, this.state.metaDataHash).send({from: account});
-        response.then(result => {
-            console.log('NFT Minted: ', result);
-            if(result.status && result.events.Minted){
+        let response = await contract.methods.awardItem(account, this.state.ipfsHash, this.state.metaDataHash).send({from: account});
+        // response.then(result => {
+            console.log('NFT Minted: ', response);
+        if(response.status && response.events.Minted){
 
-                 toast.success('NFT Minted Successfully');
-                 this.setState({
-                    file: null,
-                    selectedFileName:'',
-                    ipfsHash:null,
-                    metaDataHash: '',
-                    filename: '',
-                    filemodel: '' ,
-                    nftToken: result.events.Minted.returnValues._tokenId
-                 })
+                toast.success('NFT Minted Successfully');
+                this.setState({
+                file: null,
+                selectedFileName:'',
+                ipfsHash:null,
+                metaDataHash: '',
+                filename: '',
+                filemodel: '' ,
+                nftToken: response.events.Minted.returnValues._tokenId
+                })
 
-            }else{
-                toast.error('An Error Occured');
-          
-            }
-        }).catch(error=>{
-                toast.error('NFT mint error:')
-                  console.log('NFT mint error: ', error);
-           
-        }); 
+        }else{
+            toast.error('An Error Occured');
+        
+        }
+      
     }
 
     handleFileInput =(event)=> {
