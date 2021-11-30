@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
+import {BrowserRouter, Route, Switch, Redirect, HashRouter} from "react-router-dom";
 // import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import VintageShopContract from "./contracts/VintageShop.json";
 import getWeb3 from "./getWeb3";
@@ -130,7 +130,7 @@ class App extends Component {
     return (
       
       <div className="App">
-        <BrowserRouter basename="/blockchain-developer-bootcamp-final-project">
+        <HashRouter basename="/blockchain-developer-bootcamp-final-project">
         <MyProvider>
           <UserContext.Consumer>
             {(context) =>
@@ -143,7 +143,7 @@ class App extends Component {
           </UserContext.Consumer>
         </MyProvider>
        
-        </BrowserRouter>
+        </HashRouter>
         {/* <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
         <h2>Smart Contract Example</h2>
